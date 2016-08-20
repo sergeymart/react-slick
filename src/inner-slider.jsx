@@ -65,7 +65,14 @@ export var InnerSlider = React.createClass({
     }
   },
   componentWillReceiveProps: function(nextProps) {
-    if (this.props.slickGoTo != nextProps.slickGoTo) {
+    if (JSON.stringify(this.props.children.length) != JSON.stringify(nextProps.children.length)) {
+      this.update(nextProps);
+      this.changeSlide({
+          message: 'index',
+          index: 0,
+          currentSlide: this.state.currentSlide
+      });
+    } else if (this.props.slickGoTo != nextProps.slickGoTo) {
       this.changeSlide({
           message: 'index',
           index: nextProps.slickGoTo,
@@ -75,7 +82,7 @@ export var InnerSlider = React.createClass({
       this.update(nextProps);
       this.changeSlide({
           message: 'index',
-          index: nextProps.children.length - nextProps.slidesToShow,
+          index: 0, //nextProps.children.length - nextProps.slidesToShow,
           currentSlide: this.state.currentSlide
       });
     } else {
@@ -89,7 +96,7 @@ export var InnerSlider = React.createClass({
     this.update(this.props);
     // animating state should be cleared while resizing, otherwise autoplay stops working
     this.setState({
-      animating: false 
+      animating: false
     })
   },
   render: function () {
@@ -161,6 +168,9 @@ export var InnerSlider = React.createClass({
           padding: (this.props.centerPadding + ' 0px')
         };
       }
+    }
+    if (this.state.slideCount < this.props.slidesToShow) {
+      trackProps.infinite = false;
     }
 
     return (

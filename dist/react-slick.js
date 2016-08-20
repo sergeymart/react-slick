@@ -276,10 +276,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  },
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    if (this.props.slickGoTo != nextProps.slickGoTo) {
+	    if (JSON.stringify(this.props.children.length) != JSON.stringify(nextProps.children.length)) {
+	      this.update(nextProps);
+	      this.changeSlide({
+	        message: 'index',
+	        index: 0,
+	        currentSlide: this.state.currentSlide
+	      });
+	    } else if (this.props.slickGoTo != nextProps.slickGoTo) {
 	      this.changeSlide({
 	        message: 'index',
 	        index: nextProps.slickGoTo,
+	        currentSlide: this.state.currentSlide
+	      });
+	    } else if (this.state.currentSlide >= nextProps.children.length) {
+	      this.update(nextProps);
+	      this.changeSlide({
+	        message: 'index',
+	        index: 0, //nextProps.children.length - nextProps.slidesToShow,
 	        currentSlide: this.state.currentSlide
 	      });
 	    } else {
@@ -365,6 +379,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          padding: this.props.centerPadding + ' 0px'
 	        };
 	      }
+	    }
+	    if (this.state.slideCount < this.props.slidesToShow) {
+	      trackProps.infinite = false;
 	    }
 
 	    return _react2.default.createElement(
